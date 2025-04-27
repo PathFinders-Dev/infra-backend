@@ -50,4 +50,3 @@ def generate():
     print(chunk.text, end="")
 
 answer = generate()
-print(answer)
