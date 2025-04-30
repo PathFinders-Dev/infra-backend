@@ -10,6 +10,7 @@ FROM public.ecr.aws/docker/library/python:3.12-slim AS runtime
 WORKDIR /app
 COPY --from=builder /usr/local/lib/python3.12/site-packages /usr/local/lib/python3.12/site-packages
 COPY . .
+RUN pip install --no-cache-dir gunicorn
 RUN addgroup --system appgroup && adduser --system --ingroup appgroup appuser
 USER appuser
 CMD ["gunicorn", "--bind", "0.0.0.0:8080", "app:app"]
