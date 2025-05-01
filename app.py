@@ -21,12 +21,12 @@ def get_db_connection():
         password=DB_PASS
     )
 
-@app.route('/api/send', methods=['POST'])
+@app.route('/api/send', methods=['GET'])
 def send():
 
     return jsonify(response='Received')
 
-@app.route('/api/add-user', methods=['GET'])
+@app.route('/api/add-user', methods=['POST'])
 def add_user():
     # 고정된 사용자 정보
     username = 'testuser'
@@ -36,10 +36,6 @@ def add_user():
     with conn:
         with conn.cursor() as cur:
             cur.execute(
-                """
-                INSERT INTO test_users (username, email)
-                VALUES (%s, %s)
-                """,
                 (username, email)
             )
     conn.close()
@@ -48,6 +44,10 @@ def add_user():
         user={'username': username, 'email': email}
     )
 
+# Health check endpoint
+@app.route('/health', methods=['GET'])
+def health_check():
+    return jsonify(status='ok'), 200
+
 if __name__ == '__main__':
-    # 개발환경: 디버그 모드 허용
     app.run(host='0.0.0.0', port=8080, debug=True)
